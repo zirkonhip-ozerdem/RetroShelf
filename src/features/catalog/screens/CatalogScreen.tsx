@@ -20,6 +20,7 @@ type Props = {
 export default function CatalogScreen({initialType, title}: Props) {
   const [query, setQuery] = useState('');
 
+  // filtreleme
   const data = useMemo(() => {
     const base = SEED_ITEMS.filter(i => i.type === initialType);
     if (!query.trim()) return base;
@@ -31,12 +32,11 @@ export default function CatalogScreen({initialType, title}: Props) {
     );
   }, [initialType, query]);
 
-  const renderItem = ({item}: {item: CatalogItem}) => (
-    <Card
-      title={item.title}
-      subtitle={[item.authorOrDirector, item.year].filter(Boolean).join(' • ')}
-    />
-  );
+  // kartları render et
+const renderItem = ({item}: {item: CatalogItem}) => (
+  <Card item={item} />
+);
+
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -56,13 +56,9 @@ export default function CatalogScreen({initialType, title}: Props) {
         <FlatList
           data={data}
           keyExtractor={(it) => it.id}
-          ItemSeparatorComponent={() => <View style={{height: 12}} />}
-          contentContainerStyle={{paddingBottom: 24}}
           renderItem={renderItem}
-          ListEmptyComponent={
-            <Text style={styles.empty}>Hiç sonuç yok. Aramayı değiştir.</Text>
-          }
         />
+
       </View>
     </SafeAreaView>
   );
@@ -70,9 +66,19 @@ export default function CatalogScreen({initialType, title}: Props) {
 
 const styles = StyleSheet.create({
   safe: {flex: 1, backgroundColor: colors.bg},
-  screen: {flex: 1, padding: 16, gap: 12},
-  header: {color: colors.text, fontSize: 22, fontWeight: '700'},
-  searchWrap: {borderWidth: 1, borderColor: colors.border, borderRadius: 12, backgroundColor: colors.card},
-  search: {color: colors.text, paddingHorizontal: 14, paddingVertical: 12, fontSize: 14},
+  screen: {flex: 1, padding: 16, gap: 12, paddingTop: 32},
+  header: {color: colors.text, fontSize: 22, fontWeight: '700', marginTop: 12},
+  searchWrap: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 12,
+    backgroundColor: colors.card,
+  },
+  search: {
+    color: colors.text,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 14,
+  },
   empty: {color: colors.muted, textAlign: 'center', marginTop: 24},
 });
